@@ -4,6 +4,7 @@ import redis from 'async-redis'
 require('dotenv').config()
 
 const app = express()
+app.use(express.json())
 
 // Redis
 
@@ -20,6 +21,7 @@ function connectToRedis() {
 
 function storageArgs(key, props) {
   const { expires, body, value } = props
+
   const val = Boolean(body) ? JSON.stringify(body) : value
   return [
     Boolean(val) ? 'set' : 'get',
@@ -37,9 +39,20 @@ async function callStorage(method, ...args) {
   return response
 }
 
-app.all('/spotify/data/:key', (req, res) => {
-	res.send('Success! 🎉\n')
-})
+// Express app
+ app.all('/spotify/data/:key', async ({ params: { key }, query }, res) => {
+   try {
+     if (key === ('refresh_token' || 'access_token'))
+       throw { error: '🔒 Cannot get protected stores. 🔒' }
+
+    const reply = await callStorage(...storageArgs(key, query))
+
+     res.send({ [key]: reply })
+   } catch (err) {
+     console.error(`\n🚨 There was an error at /api/spotify/data: ${err} 🚨\n`)
+     res.send(err)
+   }
+ })
 
 module.exports = {
 	path: '/api/',
