@@ -45,6 +45,8 @@ async function callStorage(method, ...args) {
      if (key === ('refresh_token' || 'access_token'))
        throw { error: '🔒 Cannot get protected stores. 🔒' }
 
+   // console.log(query, storageArgs(key, query))
+
     const reply = await callStorage(...storageArgs(key, query))
 
      res.send({ [key]: reply })
