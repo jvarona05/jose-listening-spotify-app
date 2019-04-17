@@ -18,6 +18,25 @@ function connectToRedis() {
   return redisClient
 }
 
+function storageArgs(key, props) {
+  const { expires, body, value } = props
+  const val = Boolean(body) ? JSON.stringify(body) : value
+  return [
+    Boolean(val) ? 'set' : 'get',
+    key,
+    val,
+    Boolean(expires) ? 'EX' : null,
+    expires
+  ].filter(arg => Boolean(arg))
+}
+
+async function callStorage(method, ...args) {
+  const redisClient = connectToRedis()
+  const response = await redisClient[method](...args)
+  redisClient.quit()
+  return response
+}
+
 app.all('/spotify/data/:key', (req, res) => {
 	res.send('Success! 🎉\n')
 })
