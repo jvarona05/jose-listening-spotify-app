@@ -41,7 +41,15 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/dotenv'
   ],
+  /*
+  ** Dotenv module configuration
+  */
+  env: {
+    spotifyId: process.env.CLIENT_ID,
+    clientUrl: process.env.CLIENT_URL
+  },
   /*
   ** Axios module configuration
   */
