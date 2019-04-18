@@ -63,6 +63,32 @@ async function getAccessToken() {
   return accessTokenObj.value
 }
 
+async function setLastPlayed(access_token, item) {
+  if (!Boolean(item)) {
+    const { data } = await axios.get(
+      `${spotifyBaseUrl}me/player/recently-played?market=US`,
+      {
+        headers: {
+          withCredentials: true,
+          Authorization: `Bearer ${access_token}`
+        }
+      }
+    )
+    postStoredTrack(data.items[0].track)
+  } else {
+    postStoredTrack(item)
+  }
+}
+
+function postStoredTrack(props) {
+  callStorage(
+    ...storageArgs({
+      key: 'last_played',
+      body: props
+    })
+  )
+}
+
 const getSpotifyToken = (props = {}) =>
   axios({
     method: 'post',
@@ -132,6 +158,31 @@ app.get('/spotify/callback', async ({ query: { code } }, res) => {
       `\n🚨 There was an error at /api/spotify/callback: ${err} 🚨\n`
     )
     res.redirect(`/auth?message=${err}`)
+  }
+})
+
+app.get('/spotify/now-playing/', async (req, res) => {
+  try {
+    const access_token = await getAccessToken()
+    const response = await axios.get(
+      `${spotifyBaseUrl}me/player/currently-playing?market=US`,
+      {
+        headers: {
+          withCredentials: true,
+          Authorization: `Bearer ${access_token}`
+        }
+      }
+    )
+    const { data } = response
+    setLastPlayed(access_token, data)
+    const reply = await callStorage('get', 'last_played')
+    res.send({
+      item: JSON.parse(reply),
+      is_playing: Boolean(data.is_playing),
+      progress_ms: data.progress_ms || 0
+    })
+  } catch (err) {
+    res.send({ error: err.message })
   }
 })
 
