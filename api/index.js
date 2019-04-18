@@ -5,6 +5,8 @@ import redis from 'async-redis'
 require('dotenv').config()
 
 const app = express()
+const spotifyBaseUrl = 'https://api.spotify.com/v1/'
+
 app.use(express.json())
 
 // Redis
@@ -54,6 +56,14 @@ const getSpotifyToken = (props = {}) =>
       'Content-Type': 'application/x-www-form-urlencoded'
     }
   })
+  
+const getUserData = access_token =>
+   axios.get(`${spotifyBaseUrl}me`, {
+     headers: {
+       withCredentials: true,
+       Authorization: `Bearer ${access_token}`
+     }
+   })
 
 // Express app
  app.all('/spotify/data/:key', async ({ params: { key }, query }, res) => {
