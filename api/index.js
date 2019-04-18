@@ -1,4 +1,5 @@
 import express from 'express'
+import axios from 'axios'
 import redis from 'async-redis'
 
 require('dotenv').config()
@@ -38,6 +39,21 @@ async function callStorage(method, ...args) {
   redisClient.quit()
   return response
 }
+
+const getSpotifyToken = (props = {}) =>
+  axios({
+    method: 'post',
+    url: 'https://accounts.spotify.com/api/token',
+    params: {
+      client_id: process.env.CLIENT_ID,
+      client_secret: process.env.CLIENT_SECRET,
+      redirect_uri: `${process.env.CLIENT_URL}/api/spotify/callback`,
+      ...props
+    },
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  })
 
 // Express app
  app.all('/spotify/data/:key', async ({ params: { key }, query }, res) => {
