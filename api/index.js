@@ -56,7 +56,7 @@ const getSpotifyToken = (props = {}) =>
       'Content-Type': 'application/x-www-form-urlencoded'
     }
   })
-  
+
 const getUserData = access_token =>
    axios.get(`${spotifyBaseUrl}me`, {
      headers: {
@@ -65,13 +65,12 @@ const getUserData = access_token =>
      }
    })
 
-// Express app
- app.all('/spotify/data/:key', async ({ params: { key }, query }, res) => {
+// Routes
+
+app.all('/spotify/data/:key', async ({ params: { key }, query }, res) => {
    try {
      if (key === ('refresh_token' || 'access_token'))
        throw { error: '🔒 Cannot get protected stores. 🔒' }
-
-   // console.log(query, storageArgs(key, query))
 
     const reply = await callStorage(...storageArgs(key, query))
 
@@ -81,6 +80,39 @@ const getUserData = access_token =>
      res.send(err)
    }
  })
+
+app.get('/spotify/callback', async ({ query: { code } }, res) => {
+  try {
+    const { data } = await getSpotifyToken({
+      code,
+      grant_type: 'authorization_code'
+    })
+    const { access_token, refresh_token, expires_in } = data
+    const {
+      data: { id }
+    } = await getUserData(access_token)
+
+    if (id !== process.env.SPOTIFY_USER_ID)
+      throw "🤖 You aren't the droid we're looking for. 🤖"
+
+    callStorage(...storageArgs('is_connected', { value: true }))
+    callStorage(...storageArgs('refresh_token', { value: refresh_token }))
+    callStorage(
+      ...storageArgs('access_token', {
+        value: access_token,
+        expires: expires_in
+      })
+    )
+
+    const success = '🎉 Welcome Back 🎉'
+    res.redirect(`/auth?success=${success}`)
+  } catch (err) {
+    console.error(
+      `\n🚨 There was an error at /api/spotify/callback: ${err} 🚨\n`
+    )
+    res.redirect(`/auth?message=${err}`)
+  }
+})
 
 module.exports = {
 	path: '/api/',
