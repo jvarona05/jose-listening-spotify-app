@@ -12,7 +12,7 @@ app.use(express.json())
 // Redis
 
 function connectToRedis() {
-  const redisClient = redis.createClient(process.env.spotifyClientId)
+  const redisClient = redis.createClient(process.env.redisUrl)
   redisClient.on('connect', () => {
     // console.log('\n🎉 Redis client connected 🎉\n')
   })
