@@ -6,6 +6,7 @@
         <Progress :class="className" :progressPercent="progress" :image="image"/>
       </aside>
       <div class="metadata">
+        <h1>{{id}}</h1>
         <h2 aria-live="polite">{{name}}</h2>
         <p aria-live="polite">{{artistsList}}</p>
         <p :class="statusClass">
@@ -23,7 +24,7 @@ export default {
   components: { Progress },
   props: ['isPlaying', 'nowPlaying'],
   data() {
-    return { staleTimer: '', trackTimer: '' }
+    return { staleTimer: '', trackTimer: '', id: process.env.CLIENT_ID }
   },
   computed: {
     className() {
