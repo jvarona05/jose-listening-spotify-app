@@ -36,7 +36,7 @@ export const actions = {
         commit
     }) {
         try {
-            const clientUrl = process.env.CLIENT_URL
+            const clientUrl = process.env.clientUrl
             const redisUrl = `${clientUrl}api/spotify/data/`
             const {
                 data: {

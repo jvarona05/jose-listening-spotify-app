@@ -12,7 +12,7 @@ app.use(express.json())
 // Redis
 
 function connectToRedis() {
-  const redisClient = redis.createClient(process.env.REDIS_URL)
+  const redisClient = redis.createClient(process.env.redisUrl)
   redisClient.on('connect', () => {
     // console.log('\n🎉 Redis client connected 🎉\n')
   })
@@ -93,9 +93,9 @@ const getSpotifyToken = (props = {}) =>
     method: 'post',
     url: 'https://accounts.spotify.com/api/token',
     params: {
-      client_id: process.env.CLIENT_ID,
-      client_secret: process.env.CLIENT_SECRET,
-      redirect_uri: `${process.env.CLIENT_URL}api/spotify/callback`,
+      client_id: process.env.spotifyClientId,
+      client_secret: process.env.spotifyClientSecret,
+      redirect_uri: `${process.env.clientUrl}api/spotify/callback`,
       ...props
     },
     headers: {
