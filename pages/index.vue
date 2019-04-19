@@ -4,6 +4,7 @@
     <p v-if="!isConnected">
       😭 {{ $nuxt.layout.authorName }} hasn’t connected yet. 😭
     </p>
+    <h1>{{id}}</h1>
   </section>
 </template>
 
@@ -12,6 +13,9 @@ import NowPlaying from '~/components/NowPlaying.vue'
 
 export default {
   components: { NowPlaying },
+  data() {
+    return { id: process.env.CLIENT_ID }
+  },
   computed: {
     showTrack() {
       return this.isConnected && this.track
