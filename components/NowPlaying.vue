@@ -89,8 +89,7 @@ export default {
         } else {
           this.updateProgress(progress, duration)
         }
-         // this.nowPlaying
-        // console.log(this.nowPlaying)
+
         if (item.item.id !== this.nowPlaying.item.id) {
           this.$store.dispatch('updateTrack', item)
         }
