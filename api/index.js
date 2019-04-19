@@ -14,7 +14,7 @@ app.use(express.json())
 function connectToRedis() {
   const redisClient = redis.createClient(process.env.REDIS_URL)
   redisClient.on('connect', () => {
-    console.log('\n🎉 Redis client connected 🎉\n')
+    // console.log('\n🎉 Redis client connected 🎉\n')
   })
   redisClient.on('error', err => {
     console.error(`\n🚨 Redis client could not connect: ${err} 🚨\n`)
@@ -82,8 +82,7 @@ async function setLastPlayed(access_token, item) {
 
 function postStoredTrack(props) {
   callStorage(
-    ...storageArgs({
-      key: 'last_played',
+    ...storageArgs('last_played', {
       body: props
     })
   )
@@ -96,7 +95,7 @@ const getSpotifyToken = (props = {}) =>
     params: {
       client_id: process.env.CLIENT_ID,
       client_secret: process.env.CLIENT_SECRET,
-      redirect_uri: `${process.env.CLIENT_URL}/api/spotify/callback`,
+      redirect_uri: `${process.env.CLIENT_URL}api/spotify/callback`,
       ...props
     },
     headers: {
@@ -139,7 +138,7 @@ app.get('/spotify/callback', async ({ query: { code } }, res) => {
       data: { id }
     } = await getUserData(access_token)
 
-    if (id !== process.env.SPOTIFY_USER_ID)
+    if (id !== 'jmrv002')
       throw "🤖 You aren't the droid we're looking for. 🤖"
 
     callStorage(...storageArgs('is_connected', { value: true }))
@@ -179,7 +178,10 @@ app.get('/spotify/now-playing/', async (req, res) => {
     res.send({
       item: JSON.parse(reply),
       is_playing: Boolean(data.is_playing),
-      progress_ms: data.progress_ms || 0
+      progress_ms: {
+        progress: data.progress_ms || 0,
+        duration: data.item.duration_ms || 0
+      }
     })
   } catch (err) {
     res.send({ error: err.message })
