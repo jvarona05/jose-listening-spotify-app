@@ -14,7 +14,7 @@ import NowPlaying from '~/components/NowPlaying.vue'
 export default {
   components: { NowPlaying },
   data() {
-    return { id: process.env.CLIENT_ID }
+    return { id: process.env.spotifyId }
   },
   computed: {
     showTrack() {
