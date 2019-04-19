@@ -12,7 +12,7 @@ app.use(express.json())
 // Redis
 
 function connectToRedis() {
-  const redisClient = redis.createClient(process.env.redisUrl)
+  const redisClient = redis.createClient('dfgdfgdf')
   redisClient.on('connect', () => {
     // console.log('\n🎉 Redis client connected 🎉\n')
   })
