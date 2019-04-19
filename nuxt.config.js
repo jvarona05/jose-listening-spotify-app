@@ -45,6 +45,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/dotenv'
   ],
+  
   /*
   ** Axios module configuration
   */
@@ -63,7 +64,7 @@ export default {
      extend(config, ctx) {}
   },
   serverMiddleware: ['~/api'],
-  
+
   /*
   ** Dotenv module configuration
   */
