@@ -16,7 +16,7 @@ export default {
       { hid: 'description', name: 'description', content: pkg.description }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/assets/spotify-favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/spotify-favicon.ico' }
     ]
   },
 
