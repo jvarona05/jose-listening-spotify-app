@@ -12,10 +12,9 @@ app.use(express.json())
 // Redis
 
 function connectToRedis() {
-  console.log(process.env.CLIENT_ID, '===', process.env.spotifyClientId)
   const redisClient = redis.createClient(process.env.REDIS_URL)
   redisClient.on('connect', () => {
-    // console.log('\n🎉 Redis client connected 🎉\n')
+    console.log('\n🎉 Redis client connected 🎉\n')
   })
   redisClient.on('error', err => {
     console.error(`\n🚨 Redis client could not connect: ${err} 🚨\n`)
