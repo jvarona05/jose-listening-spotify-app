@@ -4,7 +4,7 @@
     <section class="content">
       <nuxt/>
     </section>
-    <nuxt-link v-if="isAuth" class="area-close" aria-hidden="true" to="/" name="index"></nuxt-link>
+    <nuxt-link v-if="isAuth" class="area-close" aria-hidden="true" to="/" name="index"></nuxt-link> 
   </div>
 </template>
 
@@ -27,9 +27,7 @@ export default {
   },
   head() {
     return {
-      title: `${this.$options.authorName} ${
-        this.$options.titleShort
-      } ·X· A Musical App`,
+      title: `${this.$options.authorName} ${this.$options.titleShort} ·X· A Musical App`,
       link: [
         {
           rel: 'stylesheet',
