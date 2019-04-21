@@ -61,25 +61,27 @@ export default {
         : 'has paused this track'
     }
   },
-  created() {
+  created() { 
     this.getNowPlaying()
     this.staleTimer = setInterval(() => {
       this.getNowPlaying()
-    }, 10000)
+    }, 5000)
   },
   methods: {
     updateProgress(progress = 0, duration = 0) {
       this.$store.dispatch('updateProgress', { progress, duration })
     },
     async getNowPlaying() {
-      const data = await this.$axios.$get(
+      const {
+          item, 
+          is_playing, 
+          progress_ms
+      } = await this.$axios.$get(
         `/api/spotify/now-playing/`
       )
-      // console.log(data)
-      const progress = data.progress_ms.progress
-      const duration = data.progress_ms.duration
-      const is_playing = data.is_playing
-      const item = data.item
+
+      const progress = progress_ms.progress
+      const duration = progress_ms.duration
 
       if (Boolean(item)) {
         this.$store.dispatch('updateStatus', is_playing)

@@ -45,6 +45,7 @@ async function callStorage(method, ...args) {
 async function getAccessToken() {
   const redisClient = connectToRedis()
   const accessTokenObj = { value: await redisClient.get('access_token') }
+  
   if (!Boolean(accessTokenObj.value)) {
     const refresh_token = await redisClient.get('refresh_token')
     const {
