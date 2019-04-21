@@ -71,8 +71,6 @@ export default {
   */
   env: {
     spotifyClientId: process.env.CLIENT_ID,
-    spotifyClientSecret: process.env.CLIENT_SECRET,
     clientUrl: process.env.CLIENT_URL,
-    redisUrl: process.env.REDIS_URL
   }
 }

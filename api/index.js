@@ -14,7 +14,7 @@ app.use(express.json())
 function connectToRedis() {
   const redisClient = redis.createClient(process.env.REDIS_URL)
   redisClient.on('connect', () => {
-    console.log('\n🎉 Redis client connected 🎉\n')
+    // console.log('\n🎉 Redis client connected 🎉\n')
   })
   redisClient.on('error', err => {
     console.error(`\n🚨 Redis client could not connect: ${err} 🚨\n`)
