@@ -23,7 +23,6 @@ export const mutations = {
         state.isPlaying = isPlaying
     },
     progressChange(state, {progress,duration}) {
-      // console.log(progress,duration)
         state.trackProgress = (progress / duration) * 100
     },
     recentlyPlayedChange(state, recentlyPlayed) {
