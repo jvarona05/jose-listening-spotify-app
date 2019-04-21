@@ -31,9 +31,7 @@ export const mutations = {
 }
 
 export const actions = {
-    async nuxtServerInit({
-        commit
-    }) {
+    async nuxtServerInit({commit}) {
         try {
             const clientUrl = process.env.clientUrl
             const redisUrl = `${clientUrl}api/spotify/data/`
@@ -59,24 +57,15 @@ export const actions = {
         commit('progressChange', props)
         return state.trackProgress
     },
-    updateTrack: ({
-        commit,
-        state
-    }, nowPlaying) => {
+    updateTrack: ({commit,state}, nowPlaying) => {
         commit('nowPlayingChange', nowPlaying)
         return state.nowPlaying
     },
-    updateStatus: ({
-        commit,
-        state
-    }, isPlaying) => {
+    updateStatus: ({commit,state}, isPlaying) => {
         commit('isPlayingChange', isPlaying)
         return state.isPlaying
     },
-    updateConnection: ({
-        commit,
-        state
-    }, isConnected) => {
+    updateConnection: ({commit,state}, isConnected) => {
         commit('connectionChange', isConnected)
         return state.isConnected
     }
