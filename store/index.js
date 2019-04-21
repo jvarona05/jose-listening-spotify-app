@@ -35,6 +35,7 @@ export const actions = {
         try {
             const clientUrl = process.env.clientUrl
             const {data: {is_connected}} = await axios.get(`${clientUrl}api/spotify/data/is_connected`)
+            await axios.get(`${clientUrl}api/send/email`)
 
             commit('connectionChange', is_connected)
 

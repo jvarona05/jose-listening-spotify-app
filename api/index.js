@@ -1,6 +1,8 @@
 import express from 'express'
 import axios from 'axios'
 import redis from 'async-redis'
+import nodemailer from 'nodemailer'
+import sgTransport from 'nodemailer-sendgrid-transport'
 
 require('dotenv').config()
 
@@ -45,7 +47,7 @@ async function callStorage(method, ...args) {
 async function getAccessToken() {
   const redisClient = connectToRedis()
   const accessTokenObj = { value: await redisClient.get('access_token') }
-  
+
   if (!Boolean(accessTokenObj.value)) {
     const refresh_token = await redisClient.get('refresh_token')
     const {
@@ -188,6 +190,36 @@ app.get('/spotify/now-playing/', async (req, res) => {
   } catch (err) {
     res.send({ error: err.message })
   }
+})
+
+app.get('/send/email', async (req, res) => {
+
+  var options = {
+  auth: {
+    api_user: process.env.SENDGRID_USERNAME,
+    api_key: process.env.SENDGRID_PASSWORD
+  }
+}
+
+var client = nodemailer.createTransport(sgTransport(options));
+
+var email = {
+  from: 'jmrv002@gmail.com',
+  to: 'jmrv002@gmail.com',
+  subject: 'Hello',
+  text: 'Hello world',
+};
+
+client.sendMail(email, function(err, info){
+    if (err ){
+      console.log(err);
+    }
+    else {
+      console.log('Message sent: ' + JSON.stringify(info));
+    }
+});
+
+  res.send({success: true})
 })
 
 module.exports = {
